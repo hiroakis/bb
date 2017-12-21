@@ -18,8 +18,7 @@ func main() {
 	}
 
 	if len(s)%2 != 0 {
-		fmt.Println(s)
-		return
+		os.Exit(1)
 	}
 
 	var (
@@ -29,13 +28,16 @@ func main() {
 	for n, c := range s {
 		if !((48 <= c && c <= 57) ||
 			(65 <= c && c <= 70) || (97 <= c && c <= 102)) {
-			fmt.Println(s)
-			return
+			os.Exit(1)
 		}
 		bb = bb + string(c)
 		if (n+1)%2 == 0 {
-			bSlice = bSlice + fmt.Sprintf("0x%s, ", bb)
-			bb = ""
+			if n == len(s)-1 {
+				bSlice = bSlice + fmt.Sprintf("0x%s", bb)
+			} else {
+				bSlice = bSlice + fmt.Sprintf("0x%s, ", bb)
+				bb = ""
+			}
 		}
 	}
 	fmt.Printf("[]byte{%s}", bSlice)
