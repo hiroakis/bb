@@ -27,8 +27,8 @@ func main() {
 		bSlice string
 	)
 	for n, c := range s {
-		if !(48 <= c || c <= 57 ||
-			65 <= c || c <= 70 || 97 <= c || c <= 102) {
+		if !((48 <= c && c <= 57) ||
+			(65 <= c && c <= 70) || (97 <= c && c <= 102)) {
 			fmt.Println(s)
 			return
 		}
