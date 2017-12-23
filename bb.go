@@ -2,12 +2,36 @@ package bb
 
 import (
 	"bufio"
+	"flag"
 	"fmt"
+	"io"
+	"log"
 	"os"
 	"strings"
 )
 
+type cli struct {
+	outStream, errStream io.Writer
+}
+
+const (
+	exitCodeOK = iota
+	exitCodeErr
+)
+
 func Run(args []string) int {
+	cl := &cli{outStream: os.Stdout, errStream: os.Stderr}
+	err := cl.run(args)
+	if err != nil {
+		if err != flag.ErrHelp {
+			log.Println(err)
+		}
+		return exitCodeErr
+	}
+	return exitCodeOK
+}
+
+func (cl *cli) run(args []string) error {
 	var s string
 	if len(args) < 1 {
 		in := bufio.NewScanner(os.Stdin)
@@ -20,7 +44,7 @@ func Run(args []string) int {
 	s = strings.TrimSpace(s)
 
 	if len(s)%2 != 0 {
-		return 1
+		return fmt.Errorf("malformed hex string: %q", s)
 	}
 
 	var (
@@ -30,7 +54,7 @@ func Run(args []string) int {
 	for n, c := range s {
 		if !((48 <= c && c <= 57) ||
 			(65 <= c && c <= 70) || (97 <= c && c <= 102)) {
-			return 1
+			return fmt.Errorf("malformed hex string contained invalid character: %c in %q", c, s)
 		}
 		str = str + string(c)
 		if (n+1)%2 == 0 {
@@ -42,6 +66,6 @@ func Run(args []string) int {
 			}
 		}
 	}
-	fmt.Printf("[]byte{%s}", bSlice)
-	return 0
+	_, err := fmt.Fprintf(cl.outStream, "[]byte{%s}", bSlice)
+	return err
 }
