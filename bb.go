@@ -1,4 +1,4 @@
-package main
+package bb
 
 import (
 	"bufio"
@@ -7,20 +7,20 @@ import (
 	"strings"
 )
 
-func main() {
+func Run(args []string) int {
 	var s string
-	if len(os.Args) < 2 {
+	if len(args) < 1 {
 		in := bufio.NewScanner(os.Stdin)
 		if in.Scan() {
 			s = in.Text()
 		}
 	} else {
-		s = os.Args[1]
+		s = args[0]
 	}
 	s = strings.TrimSpace(s)
 
 	if len(s)%2 != 0 {
-		os.Exit(1)
+		return 1
 	}
 
 	var (
@@ -30,7 +30,7 @@ func main() {
 	for n, c := range s {
 		if !((48 <= c && c <= 57) ||
 			(65 <= c && c <= 70) || (97 <= c && c <= 102)) {
-			os.Exit(1)
+			return 1
 		}
 		str = str + string(c)
 		if (n+1)%2 == 0 {
@@ -43,4 +43,5 @@ func main() {
 		}
 	}
 	fmt.Printf("[]byte{%s}", bSlice)
+	return 0
 }
