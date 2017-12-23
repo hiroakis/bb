@@ -8,7 +8,7 @@ import (
 
 func TestRun(t *testing.T) {
 	input := "16bf0f1e88de"
-	expect := "[]byte{0x16, 0xbf, 0x0f, 0x1e, 0x88, 0xde}"
+	expect := "[]byte{0x16, 0xbf, 0xf, 0x1e, 0x88, 0xde}"
 
 	buf := &bytes.Buffer{}
 	cl := &cli{outStream: buf, errStream: ioutil.Discard}
