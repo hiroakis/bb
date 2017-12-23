@@ -32,6 +32,25 @@ func Run(args []string) int {
 }
 
 func (cl *cli) run(args []string) error {
+	fs := flag.NewFlagSet("bb", flag.ContinueOnError)
+	fs.SetOutput(cl.errStream)
+	fs.Usage = func() {
+		fmt.Fprintf(cl.errStream, `bb - command line tool to replace hex string with Go byte slice
+
+Usage:
+    %% bb 16bf0f1e88de
+    []byte{0x16, 0xbf, 0x0f, 0x1e, 0x88, 0xde}
+
+Options:
+`)
+		fs.PrintDefaults()
+	}
+	err := fs.Parse(args)
+	if err != nil {
+		return err
+	}
+	args = fs.Args()
+
 	var s string
 	if len(args) < 1 {
 		in := bufio.NewScanner(os.Stdin)
@@ -66,6 +85,6 @@ func (cl *cli) run(args []string) error {
 			}
 		}
 	}
-	_, err := fmt.Fprintf(cl.outStream, "[]byte{%s}", bSlice)
+	_, err = fmt.Fprintf(cl.outStream, "[]byte{%s}", bSlice)
 	return err
 }
