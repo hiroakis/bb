@@ -1,4 +1,4 @@
-package bb
+package main
 
 import (
 	"bufio"
@@ -20,7 +20,11 @@ const (
 	exitCodeErr
 )
 
-func Run(args []string) int {
+func main() {
+	os.Exit(run(os.Args[1:]))
+}
+
+func run(args []string) int {
 	cl := &cli{outStream: os.Stdout, errStream: os.Stderr}
 	err := cl.run(args)
 	if err != nil {
