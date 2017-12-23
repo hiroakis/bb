@@ -2,6 +2,7 @@ package bb
 
 import (
 	"bufio"
+	"encoding/hex"
 	"flag"
 	"fmt"
 	"io"
@@ -71,28 +72,9 @@ Options:
 }
 
 func bbStr(s string) (string, error) {
-	if len(s)%2 != 0 {
-		return "", fmt.Errorf("malformed hex string: %q", s)
+	decoded, err := hex.DecodeString(s)
+	if err != nil {
+		return "", err
 	}
-
-	var (
-		str    string
-		bSlice string
-	)
-	for n, c := range s {
-		if !((48 <= c && c <= 57) ||
-			(65 <= c && c <= 70) || (97 <= c && c <= 102)) {
-			return "", fmt.Errorf("malformed hex string contained invalid character: %c in %q", c, s)
-		}
-		str = str + string(c)
-		if (n+1)%2 == 0 {
-			if n == len(s)-1 {
-				bSlice = bSlice + fmt.Sprintf("0x%s", str)
-			} else {
-				bSlice = bSlice + fmt.Sprintf("0x%s, ", str)
-				str = ""
-			}
-		}
-	}
-	return fmt.Sprintf("[]byte{%s}", bSlice), nil
+	return fmt.Sprintf("%#v", decoded), nil
 }

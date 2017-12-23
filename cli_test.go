@@ -18,6 +18,6 @@ func TestRun(t *testing.T) {
 	}
 	out := buf.String()
 	if out != expect {
-		t.Errorf("something went wrong. out: %s, expect: %s", out, expect)
+		t.Errorf("something went wrong.\n   out: %s\nexpect: %s", out, expect)
 	}
 }
