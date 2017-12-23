@@ -62,8 +62,17 @@ Options:
 	}
 	s = strings.TrimSpace(s)
 
+	str, err := bbStr(s)
+	if err != nil {
+		return err
+	}
+	_, err = fmt.Fprint(cl.outStream, str)
+	return err
+}
+
+func bbStr(s string) (string, error) {
 	if len(s)%2 != 0 {
-		return fmt.Errorf("malformed hex string: %q", s)
+		return "", fmt.Errorf("malformed hex string: %q", s)
 	}
 
 	var (
@@ -73,7 +82,7 @@ Options:
 	for n, c := range s {
 		if !((48 <= c && c <= 57) ||
 			(65 <= c && c <= 70) || (97 <= c && c <= 102)) {
-			return fmt.Errorf("malformed hex string contained invalid character: %c in %q", c, s)
+			return "", fmt.Errorf("malformed hex string contained invalid character: %c in %q", c, s)
 		}
 		str = str + string(c)
 		if (n+1)%2 == 0 {
@@ -85,6 +94,5 @@ Options:
 			}
 		}
 	}
-	_, err = fmt.Fprintf(cl.outStream, "[]byte{%s}", bSlice)
-	return err
+	return fmt.Sprintf("[]byte{%s}", bSlice), nil
 }
