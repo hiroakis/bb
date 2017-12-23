@@ -63,18 +63,10 @@ Options:
 	}
 	s = strings.TrimSpace(s)
 
-	str, err := bbStr(s)
+	decoded, err := hex.DecodeString(s)
 	if err != nil {
 		return err
 	}
-	_, err = fmt.Fprint(cl.outStream, str)
+	_, err = fmt.Fprintf(cl.outStream, "%#v", decoded)
 	return err
-}
-
-func bbStr(s string) (string, error) {
-	decoded, err := hex.DecodeString(s)
-	if err != nil {
-		return "", err
-	}
-	return fmt.Sprintf("%#v", decoded), nil
 }
