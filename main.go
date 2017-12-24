@@ -37,6 +37,8 @@ func run(args []string) int {
 }
 
 func (cl *cli) run(args []string) error {
+	log.SetOutput(cl.errStream)
+	log.SetFlags(0)
 	fs := flag.NewFlagSet("bb", flag.ContinueOnError)
 	fs.SetOutput(cl.errStream)
 	fs.Usage = func() {
