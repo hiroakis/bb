@@ -4,7 +4,9 @@ bb is a command line tool to replace hex string with Go byte slice.
 
 # Installation
 
-go get
+```
+go install github.com/hiroakis/bb@latest
+```
 
 # Use case
 
